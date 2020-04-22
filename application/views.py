@@ -1,6 +1,8 @@
-from flask import Flask, jsonify
+from flask import Flask, jsonify, render_template
 from flask import current_app as app
 
 @app.route('/')
 def hello():
-	return jsonify({'message': 'HELLO WOLRD'})
+	user = {'username': 'Miguel'}
+	# return jsonify({'message': 'HELLO WOLRD'})
+	return render_template('index.html', title='Home', user=user)
