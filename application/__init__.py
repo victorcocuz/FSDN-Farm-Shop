@@ -2,7 +2,7 @@ from flask import Flask, jsonify
 import logging
 
 def create_app(test_config=None):
-	app = Flask(__name__)
+	app = Flask(__name__, instance_relative_config=True)
 
 	logging.basicConfig()
 	logging.getLogger().setLevel(logging.DEBUG)
@@ -13,7 +13,7 @@ def create_app(test_config=None):
 
 	return app
 
-APP = create_app()
+# APP = create_app()
 
-if __name__ == '__main__':
-    APP.run(port=8080, debug=True)
+# if __name__ == '__main__':
+#     APP.run(port=8080, debug=True)
