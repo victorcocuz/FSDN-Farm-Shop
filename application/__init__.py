@@ -12,3 +12,8 @@ def create_app(test_config=None):
 		return jsonify({'message': 'HELLO WOLRD'})
 
 	return app
+
+APP = create_app()
+
+if __name__ == '__main__':
+    APP.run(port=8080, debug=True)
