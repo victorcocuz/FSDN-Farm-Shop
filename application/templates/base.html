@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		{%if title %}
+		<title>{{ title }} - Farm Shops</title>
+		{% else %}
+		<title>Welcome to the Farm Shops app</title>
+		{% endif %}
+	</head>
+	<body>
+		<div> Farm Shop App: <a href="/index">Home</a></div>
+		<hr>
+		{% block content %}{% endblock %}
+	</body>
+</html>
