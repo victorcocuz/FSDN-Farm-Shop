@@ -7,9 +7,8 @@ def create_app(test_config=None):
 	logging.basicConfig()
 	logging.getLogger().setLevel(logging.DEBUG)
 
-	@app.route('/')
-	def hello():
-		return jsonify({'message': 'HELLO WOLRD'})
+	with app.app_context():
+		from application import views
 
 	return app
 
