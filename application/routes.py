@@ -16,7 +16,7 @@ def home():
 			'body': 'The Avengers movie was so cool!'
 		}
 	]
-	return render_template('home.html', title='Home', user=user, posts=posts)
+	return render_template('pages/home.html', title='Home', user=user, posts=posts)
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -25,4 +25,12 @@ def login():
 		flash('Login requested for user {}, remember_me={}'.format(
 			form.username.data, form.remember_me.data))
 		return redirect(url_for('home'))
-	return render_template('login.html', title='sign In', form=form)
+	return render_template('pages/login.html', title='sign In', form=form)
+
+@app.route('/farms/create', methods=['GET'])
+def create_farm_form():
+	return render_template('forms/new_farm.html')
+
+@app.route('/products/create', methods=['GET'])
+def create_product_form():
+	return render_template('forms/new_product.html')
