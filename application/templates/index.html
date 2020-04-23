@@ -1,8 +1,27 @@
-{% extends "base.html" %}
-
-{% block content %}
-		<h1>Hello, {{ user.username }}!</h1>
-		{% for post in posts %}
-		<div><p>{{ post.author.username }} says: <b> {{ post.body }}</b></p></div>
-		{% endfor %}
-{% endblock %}
+<!DOCTYPE html>
+<html>
+	<head>
+		{% if title %}
+		<title>{{ title }} - Farm Shops</title>
+		{% else %}
+		<title>Welcome to the Farm Shops app</title>
+		{% endif %}
+	</head>
+	<body>
+		<div>
+			<a href="{{ url_for('login') }}">Login</a>
+			<a href="{{ url_for('home') }}">Home</a>
+		</div>
+		<hr>
+		{% with messages = get_flashed_messages() %}
+		{% if messages %}
+		<ul>
+			{% for message in messages %}
+			<li>{{ message }}</li>
+			{% endfor %}
+		</ul>
+		{% endif %}
+		{% endwith %}
+		{% block content %}{% endblock %}
+	</body>
+</html>
