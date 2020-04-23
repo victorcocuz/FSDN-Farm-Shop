@@ -1,10 +1,12 @@
 import logging
 from flask import Flask, jsonify
-# from config import DevelopmentConfig
+from config import DevelopmentConfig
+
+# from .. import config
 
 def create_app(test_config=None):
-	app = Flask(__name__, instance_relative_config=True)
-	# app.config.from_object(DevelopmentConfig)
+	app = Flask(__name__)
+	app.config.from_object(DevelopmentConfig)
 
 	logging.basicConfig()
 	logging.getLogger().setLevel(logging.DEBUG)
