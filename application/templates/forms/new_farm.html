@@ -1,5 +1,20 @@
 {% extends 'index.html' %}
 {% block title %}New Farm{% endblock %}
 {% block content %}
-<h1>Test Farm Form</h1>
+<form method="POST">
+	<h1>Add a new farm</h1>
+	<div>
+		{{ form.name.label }}
+		{{ form.name(size=32) }}
+	</div>	
+	<div>
+		{{ form.address.label }}
+		{{ form.address(size=32) }}
+	</div>
+	<div>
+		{{ form.city.label }}
+		{{ form.city(size=32) }}
+	</div>
+	<input type="submit" value="Create Farm">
+</form>
 {% endblock %}

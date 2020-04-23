@@ -1,5 +1,16 @@
 {% extends 'index.html' %}
 {% block title %}New Product{% endblock %}
 {% block content %}
-<h1>Test Product Form</h1>
+<form method="POST">
+	<h1>Add a new product</h1>
+	<div>
+		{{ form.name.label }}
+		{{ form.name(size=32) }}
+	</div>	
+	<div>
+		{{ form.quantity.label }}
+		{{ form.quantity(size=4) }}
+	</div>
+	<input type="submit" value="Create Product">
+</form>
 {% endblock %}

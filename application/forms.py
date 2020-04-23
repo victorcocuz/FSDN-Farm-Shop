@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, BooleanField, SubmitField
+from wtforms import IntegerField, StringField, PasswordField, BooleanField, SubmitField
 from wtforms.validators import DataRequired
 
 class LoginForm(FlaskForm):
@@ -11,8 +11,8 @@ class LoginForm(FlaskForm):
 class FarmForm(FlaskForm):
 	name = StringField('name', validators=[DataRequired()])
 	address = StringField('address', validators=[DataRequired()])
-	city = StringField('name', validators=[DataRequired()])
+	city = StringField('city', validators=[DataRequired()])
 
-class FoodForm(FlaskForm):
-	name = StringField('name', validator=[DataRequired()])
-	quantity = StringField('address', validators=[DataRequired()])
+class ProductForm(FlaskForm):
+	name = StringField('name', validators=[DataRequired()])
+	quantity = IntegerField('quantity', validators=[DataRequired()])

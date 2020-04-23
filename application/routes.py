@@ -1,6 +1,6 @@
 from flask import render_template, flash, redirect, url_for
 from flask import current_app as app
-from application.forms import LoginForm
+from application.forms import LoginForm, FarmForm, ProductForm
 
 @app.route('/')
 @app.route('/home')
@@ -29,8 +29,8 @@ def login():
 
 @app.route('/farms/create', methods=['GET'])
 def create_farm_form():
-	return render_template('forms/new_farm.html')
+	return render_template('forms/new_farm.html', form=FarmForm())
 
 @app.route('/products/create', methods=['GET'])
 def create_product_form():
-	return render_template('forms/new_product.html')
+	return render_template('forms/new_product.html', form=ProductForm())
