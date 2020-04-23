@@ -12,7 +12,7 @@ def create_app(test_config=None):
 	logging.getLogger().setLevel(logging.DEBUG)
 
 	with app.app_context():
-		from application import views
+		from application import routes
 
 	return app
 
