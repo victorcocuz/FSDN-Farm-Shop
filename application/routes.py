@@ -106,8 +106,6 @@ def update_farm(farm_id):
 # -----------------------------------------------------------------------#
 @app.route('/farms/<int:farm_id>', methods=['DELETE'])
 def delete_farm(farm_id):
-	logging.error('fuuuuuck')
-	logging.error(farm_id)
 	try:
 		db.session.query(Farm).filter(Farm.id==farm_id).delete()
 		db.session.commit()
