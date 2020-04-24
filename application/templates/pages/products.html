@@ -1,0 +1,42 @@
+{% extends "index.html" %}
+
+{% block content %}
+	<h1>Products</h1>
+	<h3>{{ data.farm.name }}</h3>
+	<h5>{{ data.farm.address }}, {{ data.farm.city }}</h5>
+
+	<div>
+		<a href="{{ url_for('create_product_form', farm_id=data.farm.id) }}">Add a new product</a>
+		<ul id="products">
+			{% for product in data.products %}
+			<li>
+				{{ product.name }}
+				{{ product.quantity }}
+				<a href="{{ url_for('update_product_form', farm_id=data.farm.id, product_id=product.id) }}">Update Product</a>
+				<button class="delete-button" data-id="{{ product.id }}" data-farm-id="{{ data.farm.id }}">Remove Product</button>
+			</li>
+			{% endfor %}
+		</ul>
+	</div>
+	<script>
+		const deleteBtns = document.querySelectorAll('.delete-button');
+		for (let i = 0; i < deleteBtns.length; i++) {
+			const btn = deleteBtns[i];
+			btn.onclick = function(e) {
+				console.log('event', e);
+				const product_id = e.target.dataset['id'];
+				const farm_id = e.target.dataset['farmId'];
+				fetch('/' + farm_id + '/products/' + product_id, {
+					method: 'DELETE'
+		  		})
+			  	.then(function() {
+					const item = e.target.parentElement;
+					item.remove();
+			  	})
+			  	.catch(function() {
+						document.getElementById('error').className = '';
+					})
+			}
+	  	}  	
+	</script>
+{% endblock %}

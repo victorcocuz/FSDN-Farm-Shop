@@ -1,20 +1,39 @@
 {% extends 'index.html' %}
 {% block title %}New Farm{% endblock %}
 {% block content %}
-<form method="POST">
-	<h1>Add a new farm</h1>
-	<div>
-		{{ form.name.label }}
-		{{ form.name(size=32) }}
-	</div>	
-	<div>
-		{{ form.address.label }}
-		{{ form.address(size=32) }}
-	</div>
-	<div>
-		{{ form.city.label }}
-		{{ form.city(size=32) }}
-	</div>
-	<input type="submit" value="Create Farm">
-</form>
+{% if farm %}
+	<form method="POST">
+		<h1>Update farm: {{ farm.name }}</h1>
+		<div>
+			<label for="name">Name</label>
+			{{ form.name(placeholder=farm.name, size=120) }}
+		</div>	
+		<div>
+			<label for="address">Address</label>
+			{{ form.address(placeholder=farm.address, size=120) }}
+		</div>
+		<div>
+			<label for="city">City</label>
+			{{ form.city(placeholder=farm.city, size=120) }}
+		</div>
+		<input type="submit" value="Update Farm">
+	</form>	
+{% else %}
+	<form method="POST">
+		<h1>Add a new farm</h1>
+		<div>
+			<label for="name">Name</label>
+			{{ form.name(placeholder='Add a name', size=120) }}
+		</div>	
+		<div>
+			<label for="address">Address</label>
+			{{ form.address(placeholder='Add an address', size=120) }}
+		</div>
+		<div>
+			<label for="city">City</label>
+			{{ form.city(placeholder='Add a city', size=120) }}
+		</div>
+		<input type="submit" value="Create Farm">
+	</form>
+{% endif %}
 {% endblock %}

@@ -2,6 +2,8 @@ import os
 import logging
 from flask import Flask, jsonify
 from config import ProductionConfig, StagingConfig, DevelopmentConfig, TestingConfig
+from flask_migrate import Migrate
+from flask_cors import CORS
 
 config = {
 	"production": ProductionConfig,
@@ -20,11 +22,22 @@ def create_app(test_config=None):
 	app = Flask(__name__, instance_relative_config=True)
 	configure_app(app)
 
-	logging.basicConfig()
-	logging.getLogger().setLevel(logging.DEBUG)
-
 	with app.app_context():
 		from application import routes
+		from application.models import setup_db, db
+
+	setup_db(app)
+	migrate = Migrate(app, db)
+	cors = CORS(app, resources={r"/*": {"origins": "*"}})
+
+	@app.after_request
+	def after_request(response):
+		response.headers.add('Access-Control-Allow-Headers', 'Content-Type, Authorization')
+		response.headers.add('Access-Control-Allow-Methods', 'GET, POST, PATCH, DELETE, OPTIONS')
+		return response
+	
+	logging.basicConfig()
+	logging.getLogger().setLevel(logging.DEBUG)
 
 	return app
 

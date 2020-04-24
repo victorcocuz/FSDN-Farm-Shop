@@ -1,0 +1,37 @@
+{% extends "index.html" %}
+
+{% block content %}
+	<div>
+		<h1>Farms</h1>
+		<a href="{{ url_for('create_farm_form') }}">Add a new farm</a>
+		<ul id="farms">
+			{% for farm in data %}
+			<li>
+				<a href="{{ url_for('show_products', farm_id=farm.id) }}">{{ farm.name }}</a>
+				<a href="{{ url_for('update_farm_form', farm_id=farm.id) }}">Update Farm</a>
+				<button class="delete-button" data-farm-id="{{ farm.id }}" >Remove Farm</button>
+			</li>
+			{% endfor %}
+		</ul>
+	</div>
+	<script>
+		const deleteBtns = document.querySelectorAll('.delete-button');
+		for (let i = 0; i < deleteBtns.length; i++) {
+			const btn = deleteBtns[i];
+			btn.onclick = function(e) {
+				console.log('event', e);
+				const farm_id = e.target.dataset['farmId'];
+				fetch('/farms/' + farm_id, {
+					method: 'DELETE'
+		  		})
+			  	.then(function() {
+					const item = e.target.parentElement;
+					item.remove();
+			  	})
+			  	.catch(function() {
+						document.getElementById('error').className = '';
+					})
+			}
+	  	}  	
+	</script>
+{% endblock %}

@@ -1,16 +1,31 @@
 {% extends 'index.html' %}
 {% block title %}New Product{% endblock %}
 {% block content %}
-<form method="POST">
-	<h1>Add a new product</h1>
-	<div>
-		{{ form.name.label }}
-		{{ form.name(size=32) }}
-	</div>	
-	<div>
-		{{ form.quantity.label }}
-		{{ form.quantity(size=4) }}
-	</div>
-	<input type="submit" value="Create Product">
-</form>
+{% if product %}
+	<form method="POST">
+		<h1>Update product: {{ product.name }}</h1>
+		<div>
+			<label for="name">Name</label>
+			{{ form.name(placeholder=product.name, size=120) }}
+		</div>	
+		<div>
+			<label for="quantity">Quantity</label>
+			{{ form.quantity(placeholder=product.quantity, size=120) }}
+		</div>
+		<input type="submit" value="Update Product">
+	</form>	
+{% else %}
+	<form method="POST">
+		<h1>Add a new product</h1>
+		<div>
+			<label for="name">Name</label>
+			{{ form.name(placeholder='Add a product', size=120) }}
+		</div>	
+		<div>
+			<label for="quantity">Quantity</label>
+			{{ form.quantity(placeholder='Add a quantity', size=120) }}
+		</div>
+		<input type="submit" value="Create Product">
+	</form>	
+{% endif %}
 {% endblock %}

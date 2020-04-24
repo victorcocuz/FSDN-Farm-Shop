@@ -10,9 +10,7 @@
 	<body>
 		<div>
 			<a href="{{ url_for('login') }}">Login</a>
-			<a href="{{ url_for('home') }}">Home</a>
-			<a href="{{ url_for('create_farm_form') }}">Add a new farm</a>
-			<a href="{{ url_for('create_product_form') }}">Add a new product</a>
+			<a href="{{ url_for('farms') }}">Home</a>
 		</div>
 		<hr>
 		{% with messages = get_flashed_messages() %}
