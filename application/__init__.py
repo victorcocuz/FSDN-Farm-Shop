@@ -38,7 +38,6 @@ def create_app(test_config=None):
 	
 	logging.basicConfig()
 	logging.getLogger().setLevel(logging.DEBUG)
-	
 	logging.info(os.environ.get('DATABASE_URL'))
 
 	return app
