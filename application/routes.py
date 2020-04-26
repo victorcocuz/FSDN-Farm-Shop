@@ -6,7 +6,13 @@ from flask import current_app as app
 from application.forms import LoginForm, FarmForm, ProductForm
 from application.models import Farm, Product, db
 from sqlalchemy.exc import SQLAlchemyError
-
+from auth import AuthError, requires_auth
+from flask_jwt_extended import (
+    JWTManager, jwt_required, create_access_token,
+    jwt_refresh_token_required, create_refresh_token,
+    get_jwt_identity, set_access_cookies,
+    set_refresh_cookies, unset_jwt_cookies
+)
 import logging
 
 
@@ -24,13 +30,8 @@ def index():
 # -----------------------------------------------------------------------#
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-	form = LoginForm()
-	if form.validate_on_submit():
-		flash('Login requested for user {}, remember_me={}'.format(
-			form.username.data, form.remember_me.data))
-		return redirect(url_for('farms'))
-	return render_template('pages/login.html', title='sign In', form=form)
-
+	login_uri = app.config.get('REQUEST_URI')
+	return render_template('forms/login.html', title='sign In', login_uri=login_uri)
 
 #++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++#
 # Farms
@@ -54,10 +55,12 @@ def farms():
 # Load a new farm form or an update existing farm form
 # -----------------------------------------------------------------------#
 @app.route('/farms/farm', methods=['GET'])
+@requires_auth('edit:farm')
 def create_farm_form():
 	return render_template('forms/new_farm.html', form=FarmForm())
 
 @app.route('/farms/<int:farm_id>/update', methods=['GET'])
+@requires_auth('edit:farm')
 def update_farm_form(farm_id):
 	farm = db.session.query(Farm).filter(Farm.id==farm_id).scalar()
 	return render_template('forms/new_farm.html', form=FarmForm(), farm=farm)
@@ -65,6 +68,7 @@ def update_farm_form(farm_id):
 # Add a new farm
 # -----------------------------------------------------------------------#
 @app.route('/farms/farm', methods=['POST'])
+@requires_auth('edit:farm')
 def create_farm_submission():
 	try:
 		farm = Farm(
@@ -87,6 +91,7 @@ def create_farm_submission():
 # Update an existing farm
 # -----------------------------------------------------------------------#
 @app.route('/farms/<int:farm_id>/update', methods=['POST'])
+@requires_auth('edit:farm')
 def update_farm(farm_id):
 	try:
 		farm = db.session.query(Farm).filter(Farm.id==farm_id).scalar()
@@ -105,6 +110,7 @@ def update_farm(farm_id):
 # Delete a farm
 # -----------------------------------------------------------------------#
 @app.route('/farms/<int:farm_id>', methods=['DELETE'])
+@requires_auth('edit:farm')
 def delete_farm(farm_id):
 	try:
 		db.session.query(Farm).filter(Farm.id==farm_id).delete()
@@ -146,10 +152,12 @@ def show_products(farm_id):
 # Load a new product form or an update an existin product form
 # -----------------------------------------------------------------------#
 @app.route('/farms/<int:farm_id>/product', methods=['GET'])
+@requires_auth('edit:product')
 def create_product_form(farm_id):
 	return render_template('forms/new_product.html', form=ProductForm(), farm_id=farm_id)
 
 @app.route('/farms/<int:farm_id>/<int:product_id>', methods=['GET'])
+@requires_auth('edit:product')
 def update_product_form(farm_id, product_id):
 	product = db.session.query(Product).filter(Product.id==product_id).scalar()
 	return render_template('forms/new_product.html', form=ProductForm(), farm_id=farm_id, product=product)
@@ -158,6 +166,7 @@ def update_product_form(farm_id, product_id):
 # Add a new product
 # -----------------------------------------------------------------------#
 @app.route('/farms/<int:farm_id>/product', methods=['POST'])
+@requires_auth('edit:product')
 def create_product_submission(farm_id):
 	try:
 		product = Product(
@@ -180,6 +189,7 @@ def create_product_submission(farm_id):
 # Update an existing product
 # -----------------------------------------------------------------------#
 @app.route('/farms/<int:farm_id>/<int:product_id>', methods=['POST'])
+@requires_auth('edit:product')
 def update_product(farm_id, product_id):
 	try:
 		product = db.session.query(Product).filter(Product.farm_id==farm_id).filter(Product.id==product_id).scalar()
@@ -197,6 +207,7 @@ def update_product(farm_id, product_id):
 # Delete a product
 # -----------------------------------------------------------------------#
 @app.route('/<int:farm_id>/products/<int:product_id>', methods=['DELETE'])
+@requires_auth('edit:product')
 def delete_product(farm_id, product_id):
 	try:
 		db.session.query(Product).filter(Product.farm_id==farm_id).filter(Product.id==product_id).delete()

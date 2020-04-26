@@ -24,4 +24,14 @@
 		{% endwith %}
 		{% block content %}{% endblock %}
 	</body>
+	<script>
+		jwt = localStorage.getItem('token')
+		if (window.location.hash.split('&').length == 3){
+			if (window.location.hash.split('&')[0].split('=')[0] = '#access-token') {
+				jwt = window.location.hash.split('&')[0].split('=')[1]
+				document.cookie = 'access_token_cookie=' + jwt;
+				localStorage.setItem("token", jwt)
+			}
+		}
+	</script>
 </html>

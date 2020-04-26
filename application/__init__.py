@@ -4,6 +4,12 @@ from flask import Flask, jsonify
 from config import ProductionConfig, StagingConfig, DevelopmentConfig, TestingConfig
 from flask_migrate import Migrate
 from flask_cors import CORS
+from flask_jwt_extended import (
+    JWTManager, jwt_required, create_access_token,
+    jwt_refresh_token_required, create_refresh_token,
+    get_jwt_identity, set_access_cookies,
+    set_refresh_cookies, unset_jwt_cookies
+)
 
 config = {
 	"production": ProductionConfig,
@@ -28,6 +34,7 @@ def create_app(test_config=None):
 
 	setup_db(app)
 	migrate = Migrate(app, db)
+	jwt = JWTManager(app)
 	cors = CORS(app, resources={r"/*": {"origins": "*"}})
 
 	@app.after_request
