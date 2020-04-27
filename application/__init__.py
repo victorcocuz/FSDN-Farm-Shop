@@ -20,7 +20,7 @@ config = {
 }
 
 def configure_app(app):
-	config_name = os.getenv('FLASK_CONFIGURATION', 'testing')
+	config_name = os.getenv('FLASK_CONFIGURATION', 'production')
 	app.config.from_object(config[config_name])
 	app.config.from_pyfile('config.cfg', silent=True)
 
