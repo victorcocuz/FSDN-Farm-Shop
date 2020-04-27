@@ -26,13 +26,16 @@
 				console.log('event', e);
 				const product_id = e.target.dataset['id'];
 				const farm_id = e.target.dataset['farmId'];
-				fetch('/' + farm_id + '/products/' + product_id, {
+				fetch('/farms/' + farm_id + '/products/' + product_id, {
 					method: 'DELETE'
 		  		})
-			  	.then(function() {
-					const item = e.target.parentElement;
-					item.remove();
-			  	})
+        		.then((resp) => resp.json())
+        		.then(response => {
+      		    	if(response['success'] == true) {
+	 					const item = e.target.parentElement;
+						item.remove();     		    		
+      		    	}
+       			 })	
 			  	.catch(function() {
 						document.getElementById('error').className = '';
 					})

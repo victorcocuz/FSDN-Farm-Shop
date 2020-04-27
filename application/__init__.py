@@ -1,6 +1,6 @@
 import os
 import logging
-from flask import Flask, jsonify
+from flask import Flask, jsonify, redirect, url_for
 from config import ProductionConfig, StagingConfig, DevelopmentConfig, TestingConfig
 from flask_migrate import Migrate
 from flask_cors import CORS
@@ -20,7 +20,7 @@ config = {
 }
 
 def configure_app(app):
-	config_name = os.getenv('FLASK_CONFIGURATION', 'default')
+	config_name = os.getenv('FLASK_CONFIGURATION', 'testing')
 	app.config.from_object(config[config_name])
 	app.config.from_pyfile('config.cfg', silent=True)
 
@@ -45,7 +45,6 @@ def create_app(test_config=None):
 	
 	logging.basicConfig()
 	logging.getLogger().setLevel(logging.DEBUG)
-	logging.info(os.environ.get('DATABASE_URL'))
 
 	return app
 

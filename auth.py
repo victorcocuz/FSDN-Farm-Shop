@@ -159,12 +159,9 @@ def requires_auth(permission=''):
     def requires_auth_decorator(f):
         @wraps(f)
         def wrapper(*args, **kwargs):
-            logging.error('decorator')
-            logging.error(request.headers.get('Authorization', None))
             token = get_token_auth_cookie()
             if not token:
                 token = get_token_auth_header()
-                logging.error(token)
             try:
                 payload = verify_decode_jwt(token)
             except:

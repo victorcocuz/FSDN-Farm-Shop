@@ -1,6 +1,6 @@
-#++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++#
+#++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++#
 # Imports
-#++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++#
+#++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++#
 from flask import render_template, flash, redirect, url_for, request, jsonify
 from flask import current_app as app
 from application.forms import LoginForm, FarmForm, ProductForm
@@ -16,45 +16,48 @@ from flask_jwt_extended import (
 import logging
 
 
-#++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++#
+#++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++#
 # General
-#++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++#
+#++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++#
 
 # Index
-# -----------------------------------------------------------------------#
+# -------------------------------------------------------------------------------------------#
 @app.route('/')
 def index():
 	return redirect(url_for('farms'))
 
 # Login
-# -----------------------------------------------------------------------#
+# -------------------------------------------------------------------------------------------#
 @app.route('/login', methods=['GET', 'POST'])
 def login():
 	login_uri = app.config.get('REQUEST_URI')
 	return render_template('forms/login.html', title='sign In', login_uri=login_uri)
 
-#++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++#
+#++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++#
 # Farms
-#++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++#
+#++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++#
 
 # Show all farms
-# -----------------------------------------------------------------------#
+# -------------------------------------------------------------------------------------------#
 @app.route('/farms', methods=['GET'])
 def farms():
 	farms = db.session.query(Farm).order_by(Farm.name).all()
 	data = []
-	for farm in farms:
-		data.append({
-			'id': farm.id,
-			'name': farm.name,
-			'address': farm.address,
-			'city': farm.city
-			})
+	if (len(farms) > 0):
+		for farm in farms:
+			if not farm.id:
+				abort(404)
+			data.append({
+				'id': farm.id,
+				'name': farm.name,
+				'address': farm.address,
+				'city': farm.city
+				})
 	return render_template('pages/farms.html', title='Farms', data=data)
 
 # Load a new farm form or an update existing farm form
-# -----------------------------------------------------------------------#
-@app.route('/farms/farm', methods=['GET'])
+# -------------------------------------------------------------------------------------------#
+@app.route('/farms/0/new', methods=['GET'])
 @requires_auth('edit:farm')
 def create_farm_form():
 	return render_template('forms/new_farm.html', form=FarmForm())
@@ -66,8 +69,8 @@ def update_farm_form(farm_id):
 	return render_template('forms/new_farm.html', form=FarmForm(), farm=farm)
 
 # Add a new farm
-# -----------------------------------------------------------------------#
-@app.route('/farms/farm', methods=['POST'])
+# -------------------------------------------------------------------------------------------#
+@app.route('/farms/0/new', methods=['POST'])
 @requires_auth('edit:farm')
 def create_farm_submission():
 	try:
@@ -83,13 +86,14 @@ def create_farm_submission():
 	except SQLAlchemyError as e:
 		flash('An error occured. Farm ' + request.form.get('name') + ' could not be listed!')	
 		db.session.rollback()
-		return e
+		logging.error(e)
+		abort(400)
 	finally:
 		db.session.close()
 	return redirect(url_for('farms'))
 
 # Update an existing farm
-# -----------------------------------------------------------------------#
+# -------------------------------------------------------------------------------------------#
 @app.route('/farms/<int:farm_id>/update', methods=['POST'])
 @requires_auth('edit:farm')
 def update_farm(farm_id):
@@ -97,45 +101,51 @@ def update_farm(farm_id):
 		farm = db.session.query(Farm).filter(Farm.id==farm_id).scalar()
 		farm.name = request.form.get('name')
 		farm.address = request.form.get('address')
-		farm.city = request.form.get('address')
+		farm.city = request.form.get('city')
 
 		db.session.commit()
 	except SQLAlchemyError as e:
 		db.session.rollback()
-		return e
+		logging.error(e)
+		abort(400)
 	finally:
 		db.session.close()
 	return redirect(url_for('farms'))
 	
 # Delete a farm
-# -----------------------------------------------------------------------#
+# -------------------------------------------------------------------------------------------#
 @app.route('/farms/<int:farm_id>', methods=['DELETE'])
 @requires_auth('edit:farm')
 def delete_farm(farm_id):
 	try:
+		db.session.query(Product).filter(Product.farm_id==farm_id).delete()
 		db.session.query(Farm).filter(Farm.id==farm_id).delete()
 		db.session.commit()
 	except SQLAlchemyError as e:
 		db.session.rollback()
-		return e
+		logging.error(e)
+		abort(422)
 	finally:
 		db.session.close()
 	return jsonify({ 'success': True })
 
 
-#++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++#
+#++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++#
 # Products
-#++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++#
+#++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++#
 
 # Show all products for a specific farm
-# -----------------------------------------------------------------------#
-@app.route('/farms/<int:farm_id>', methods=['GET'])
+# -------------------------------------------------------------------------------------------#
+@app.route('/farms/<int:farm_id>/products', methods=['GET'])
 def show_products(farm_id):
+	farm = db.session.query(Farm).filter(Farm.id==farm_id).scalar()
+	if not farm:
+		abort(404)
 	products = db.session.query(Product).join(Farm, Farm.id==Product.farm_id).filter(Farm.id==farm_id).order_by(Product.name).all()
 	
 	response = []
 	data = []
-	
+
 	for product in products:
 		response.append({
 			'id': product.id,
@@ -149,14 +159,14 @@ def show_products(farm_id):
 	}
 	return render_template('pages/products.html', data=data)
 
-# Load a new product form or an update an existin product form
-# -----------------------------------------------------------------------#
-@app.route('/farms/<int:farm_id>/product', methods=['GET'])
+# Load a new product form or an update an existing product form
+# -------------------------------------------------------------------------------------------#
+@app.route('/farms/<int:farm_id>/products/0/new', methods=['GET'])
 @requires_auth('edit:product')
 def create_product_form(farm_id):
 	return render_template('forms/new_product.html', form=ProductForm(), farm_id=farm_id)
 
-@app.route('/farms/<int:farm_id>/<int:product_id>', methods=['GET'])
+@app.route('/farms/<int:farm_id>/products/<int:product_id>', methods=['GET'])
 @requires_auth('edit:product')
 def update_product_form(farm_id, product_id):
 	product = db.session.query(Product).filter(Product.id==product_id).scalar()
@@ -164,8 +174,8 @@ def update_product_form(farm_id, product_id):
 
 
 # Add a new product
-# -----------------------------------------------------------------------#
-@app.route('/farms/<int:farm_id>/product', methods=['POST'])
+# -------------------------------------------------------------------------------------------#
+@app.route('/farms/<int:farm_id>/products/0/new', methods=['POST'])
 @requires_auth('edit:product')
 def create_product_submission(farm_id):
 	try:
@@ -181,14 +191,15 @@ def create_product_submission(farm_id):
 	except SQLAlchemyError as e:
 		flash('An error occured. Product ' + request.form.get('name') + ' could not be listed!')	
 		db.session.rollback()
-		return e
+		logging.error(e)
+		abort(400)
 	finally:
 		db.session.close()
 	return redirect(url_for('show_products', farm_id=farm_id))
 
 # Update an existing product
-# -----------------------------------------------------------------------#
-@app.route('/farms/<int:farm_id>/<int:product_id>', methods=['POST'])
+# -------------------------------------------------------------------------------------------#
+@app.route('/farms/<int:farm_id>/products/<int:product_id>', methods=['POST'])
 @requires_auth('edit:product')
 def update_product(farm_id, product_id):
 	try:
@@ -199,14 +210,15 @@ def update_product(farm_id, product_id):
 		db.session.commit()
 	except SQLAlchemyError as e:
 		db.session.rollback()
-		return e
+		logging.error(e)
+		abort(400)
 	finally:
 		db.session.close()
 	return redirect(url_for('show_products', farm_id=farm_id))
 
 # Delete a product
-# -----------------------------------------------------------------------#
-@app.route('/<int:farm_id>/products/<int:product_id>', methods=['DELETE'])
+# -------------------------------------------------------------------------------------------#
+@app.route('/farms/<int:farm_id>/products/<int:product_id>', methods=['DELETE'])
 @requires_auth('edit:product')
 def delete_product(farm_id, product_id):
 	try:
@@ -214,7 +226,40 @@ def delete_product(farm_id, product_id):
 		db.session.commit()
 	except SQLAlchemyError as e:
 		db.session.rollback()
-		return e
+		logging.error(e)
+		abort(422)
 	finally:
 		db.session.close()
 	return jsonify({ 'success': True })
+
+
+#++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++#
+# Error handlers
+#++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++#
+
+# Error handlers for expected errors
+# -------------------------------------------------------------------------------------------#
+
+@app.errorhandler(400)
+def not_found(error):
+	return jsonify({
+		'success': False,
+		'error': 400,
+		'message': "bad request"
+		}), 400
+
+@app.errorhandler(404)
+def not_found(error):
+	return jsonify({
+		'success': False,
+		'error': 404,
+		'message': "not found"
+		}), 404
+
+@app.errorhandler(422)
+def not_found(error):
+	return jsonify({
+		'success': False,
+		'error': 422,
+		'message': "unprocessable"
+		}), 422

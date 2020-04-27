@@ -25,13 +25,31 @@
 		{% block content %}{% endblock %}
 	</body>
 	<script>
-		jwt = localStorage.getItem('token')
-		if (window.location.hash.split('&').length == 3){
-			if (window.location.hash.split('&')[0].split('=')[0] = '#access-token') {
-				jwt = window.location.hash.split('&')[0].split('=')[1]
-				document.cookie = 'access_token_cookie=' + jwt;
-				localStorage.setItem("token", jwt)
+		jwt = ''
+		token_type = '';
+
+		if (localStorage.getItem('token')) {
+			jwt = localStorage.getItem('token');
+		}
+
+		params = window.location.hash.split('&');
+
+		if (params.length > 0){
+			for (let i = 0; i < params.length; i++) {
+				if (params[i].split('=')[0] == "#access_token") {
+					jwt = params[i].split('=')[1];
+					console.log('jwt is ', jwt);
+				}
+				if (params[i].split('=')[0] == 'token_type') {
+					token_type = params[i].split('=')[1];
+					console.log('token type is ', token_type);
+				}
 			}
+		}
+
+		if (token_type == 'Bearer') {
+			document.cookie = 'access_token_cookie=' + jwt;
+			localStorage.setItem("token", jwt);
 		}
 	</script>
 </html>

@@ -14,4 +14,27 @@
 			{% endfor %}
 		</ul>
 	</div>
+	<script>
+		const deleteBtns = document.querySelectorAll('.delete-button');
+		for (let i = 0; i < deleteBtns.length; i++) {
+			const btn = deleteBtns[i];
+			btn.onclick = function(e) {
+				console.log('event', e);
+				const farm_id = e.target.dataset['farmId'];
+				fetch('/farms/' + farm_id, {
+					method: 'DELETE'
+		  		})
+        		.then((resp) => resp.json())
+        		.then(response => {
+      		    	if(response['success'] == true) {
+	 					const item = e.target.parentElement;
+						item.remove();     		    		
+      		    	}
+       			 })		  		
+			  	.catch(function() {
+						document.getElementById('error').className = '';
+				})
+			}
+	  	}  	
+	</script>
 {% endblock %}
