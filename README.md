@@ -88,11 +88,18 @@ Testing can be done by changing the directory to the project folder and running 
 ### Login
 To fully access and test the app a login will be required. Without login information, the user will only have access to view the farms and the products, but will not be able to edit anything.
 
-**NOTE: Login instructions will be provided in a separate note or upon request.**
+#### Login credentials
+**Administrator**
+E-Mail: vc.fsnd.coffee.shop.manager@gmail.com
+Password: testpass01!
+
+**Employee**
+E-Mail: vc.fsnd.coffee.shop.barista@gmail.com
+Password: testpass01!
 
 #### Logging In
 1. To login simply follow the login link and then press on the login link below. 
-2. Choose gmail login and insert the user and password provided.
+2. Choose **gmail login** and insert the user and password provided.
 3. Once successful, copy the url and retain the token for testing.
 4. You should now have access as per the roles described above.
 
