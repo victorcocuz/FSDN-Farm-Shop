@@ -94,9 +94,10 @@ def create_farm_submission():
 
 # Update an existing farm
 # -------------------------------------------------------------------------------------------#
-@app.route('/farms/<int:farm_id>/update', methods=['POST'])
+@app.route('/farms/<int:farm_id>/update', methods=['PATCH', 'POST'])
 @requires_auth('edit:farm')
 def update_farm(farm_id):
+	
 	try:
 		farm = db.session.query(Farm).filter(Farm.id==farm_id).scalar()
 		farm.name = request.form.get('name')
@@ -199,7 +200,7 @@ def create_product_submission(farm_id):
 
 # Update an existing product
 # -------------------------------------------------------------------------------------------#
-@app.route('/farms/<int:farm_id>/products/<int:product_id>', methods=['POST'])
+@app.route('/farms/<int:farm_id>/products/<int:product_id>', methods=['PATCH', 'POST'])
 @requires_auth('edit:product')
 def update_product(farm_id, product_id):
 	try:

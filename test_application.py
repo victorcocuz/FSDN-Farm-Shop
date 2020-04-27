@@ -32,7 +32,7 @@ class FarmShopTestCase(unittest.TestCase):
 			self.db.create_all()
 
 		self.administrator_bearer = ('Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6ImtjWW5OZGEyY3FlQndJSUhHa21IUyJ9.eyJpc3MiOiJodHRwczovL2ZzbmQtdmljdG9yY29jdXouYXV0aDAuY29tLyIsInN1YiI6Imdvb2dsZS1vYXV0aDJ8MTEyMTIxNjk1Mzc5NzMwODg2NDc0IiwiYXVkIjpbImZhcm1fc2hvcF9hcGkiLCJodHRwczovL2ZzbmQtdmljdG9yY29jdXouYXV0aDAuY29tL3VzZXJpbmZvIl0sImlhdCI6MTU4Nzk4NzE3NywiZXhwIjoxNTg4MDczNTc3LCJhenAiOiJOQ3ZjZjBIMFhMTXB6ZzV4V0doM2pKR2NxdmUwb3I1YyIsInNjb3BlIjoib3BlbmlkIHByb2ZpbGUgZW1haWwiLCJwZXJtaXNzaW9ucyI6WyJlZGl0OmZhcm0iLCJlZGl0OnByb2R1Y3QiXX0.PzoicHqYfVU_-yVoIuZWYe6GXqPZo1LtzyjfpAALKpou1xxPNLqoFK-3QeQEJIH-58WTzH7BkC8VdC4xyowx-YKNlGLbqkPR2wwr2RRkuOqipF0Ads_E1MXN8ZTDo-04RbH6m9hzarN5FaX4cd2CmtGOs48yYHIjYrTrJIFLCtuvKeW-II-R26xM926FneaO-hHWu6yU3r3V8Ty-GaZeY82YVQcQzZ-SI0gk74um1KYnIZXrdiuiXpLdQFdaHd6ay2gATnYhtXawexDIed_UbBUzLQQ08AuS4e4TADhlH71KwaTMsVJsQ-r8TTWHks0lUV_S6qsFlD1LriA-3eDMpQ')
-		self.employee_bearer = ('Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6ImtjWW5OZGEyY3FlQndJSUhHa21IUyJ9.eyJpc3MiOiJodHRwczovL2ZzbmQtdmljdG9yY29jdXouYXV0aDAuY29tLyIsInN1YiI6Imdvb2dsZS1vYXV0aDJ8MTAxNjA5NjgyNTgwNDQ0NDAxNDMzIiwiYXVkIjpbImZhcm1fc2hvcF9hcGkiLCJodHRwczovL2ZzbmQtdmljdG9yY29jdXouYXV0aDAuY29tL3VzZXJpbmZvIl0sImlhdCI6MTU4Nzk4MzUzNSwiZXhwIjoxNTg4MDY5OTM1LCJhenAiOiJOQ3ZjZjBIMFhMTXB6ZzV4V0doM2pKR2NxdmUwb3I1YyIsInNjb3BlIjoib3BlbmlkIHByb2ZpbGUgZW1haWwiLCJwZXJtaXNzaW9ucyI6W119.sL_MfzCGLd4okmmbqAB_Hsj6_BwCgxkNiakdRXTO5mzwE3EqgqwaowNzQES_hXSrjVfFe45gfAF0aLZ78DFCbx3Ufce3lO1WToSag72DGV-A-m8MbI4QeGEl1_g0k9jatQlihKw3cHOIpnxWvNtl70yjqxy4TjY9pV4ouJ58NfYoxzVguLjl0ftOLK_yLVWDWhWi00UW13yRIfyUeYHD4S2MvWS8PlaMgoSqK3Xpmvltzy0Yoiu0e7-zHb6dGh9N63MaMd6_HfsAmC71aQWjs9qBmbnct-1antDX926XYvMysT6NCrbDJFsin6Al5K5IDEHNw17raovBQ29TvgNP_w')
+		self.employee_bearer = ('Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6ImtjWW5OZGEyY3FlQndJSUhHa21IUyJ9.eyJpc3MiOiJodHRwczovL2ZzbmQtdmljdG9yY29jdXouYXV0aDAuY29tLyIsInN1YiI6Imdvb2dsZS1vYXV0aDJ8MTAxNjA5NjgyNTgwNDQ0NDAxNDMzIiwiYXVkIjpbImZhcm1fc2hvcF9hcGkiLCJodHRwczovL2ZzbmQtdmljdG9yY29jdXouYXV0aDAuY29tL3VzZXJpbmZvIl0sImlhdCI6MTU4Nzk5NjQ4MCwiZXhwIjoxNTg4MDgyODgwLCJhenAiOiJOQ3ZjZjBIMFhMTXB6ZzV4V0doM2pKR2NxdmUwb3I1YyIsInNjb3BlIjoib3BlbmlkIHByb2ZpbGUgZW1haWwiLCJwZXJtaXNzaW9ucyI6WyJlZGl0OnByb2R1Y3QiXX0.FmtdiMlmqL_jQd8PiSFepPsF5ZXWpgjBxBLbFIIiMFd6YADkNSHvHiIzbcw7_ypjIf0zwSmdVbjq0F-bcR6nJ-UmSYG8PnYxw4m9sZu82Ix6FcahQpIoTm8nu-Ck69Ahb6nXXvs0Uz26QLy9DlyymlbY1WAEPwLJIrs84KMDKGZ2MLhTM9xNF-w0Ca4VHJy6CG_aTX5tfoiflBSo38YlsSr5H4Heqtx339935fVu9Xbf-63Kc9U50PVMInEt0XT1Rq8ZKrc2-bOWjXDwHdLFIptPt7WGRF9JblXmIpTtzlt54THj85JLY-_9EFH8sm_w5NaVWfbakh9WCIUKUz_oNw')
 
 		self.test_farm = {
 		'name': 'Test Farm Name',
@@ -179,13 +179,13 @@ class FarmShopTestCase(unittest.TestCase):
 			)
 		self.assertEqual(res.status_code, 401)
 
-	# Success test the '/farms/<int:farm_id>/update' endpoint with POST method to update an existing farm
+	# Success test the '/farms/<int:farm_id>/update' endpoint with POST or PATCH method to update an existing farm
 	def test_post_farms_update(self):
 		self.create_farm()
 		farm = db.session.query(Farm).filter(Farm.name==self.test_farm['name']).first()
 		farm_id = farm.id
 
-		res = self.client().post(
+		res = self.client().patch(
 			'/farms/{}/update'.format(str(farm_id)),
 			data=dict(name=self.test_farm_update['name'], address=self.test_farm_update['address'], city=self.test_farm_update['city']),
 			headers={'Authorization': self.administrator_bearer}
@@ -199,7 +199,7 @@ class FarmShopTestCase(unittest.TestCase):
 		self.assertEqual(farm.city, self.test_farm_update['city'])
 		self.delete_farm_and_product()
 
-	# Fail test the '/farms/<int:farm_id>/update' endpoint with POST method to update an existing farm with wrong token
+	# Fail test the '/farms/<int:farm_id>/update' endpoint with POST or PATCH method to update an existing farm with wrong token
 	def test_post_farms_update_wrong_token(self):
 		self.create_farm()
 		farm = db.session.query(Farm).filter(Farm.name==self.test_farm['name']).first()
@@ -211,7 +211,7 @@ class FarmShopTestCase(unittest.TestCase):
 
 		db.session.commit()
 
-		res = self.client().post(
+		res = self.client().patch(
 			'/farms/{}/update'.format(str(farm_id)),
 			headers={'Authorization': 'Bearer token'}
 			)
@@ -278,33 +278,37 @@ class FarmShopTestCase(unittest.TestCase):
 		self.assertEqual(res.status_code, 401)
 		self.delete_farm_and_product()
 
-	# Success test the '/farms/<int:farm_id>/products<int:product_id' endpoint with GET method to load an existing product form
+	# Success test the '/farms/<int:farm_id>/products<int:product_id>' endpoint with GET method to load an existing product form
 	def test_get_products_form_update(self):
 		self.create_farm()
 		farm_id = db.session.query(Farm).filter(Farm.name==self.test_farm['name']).first().id
+		res = self.create_product(farm_id)
+		product_id = db.session.query(Product).filter(Product.name==self.test_product['name']).first().id
 
 		res = self.client().get(
-			'/farms/{}/products/0/new'.format(str(farm_id)),
+			'/farms/{}/products/{}'.format(str(farm_id), str(product_id)),
 			headers={'Authorization': self.administrator_bearer}
 			)		
 
 		self.assertEqual(res.status_code, 200)	
 		self.delete_farm_and_product()
 
-	# Fail test the '/farms/<int:farm_id>/products<int:product_id' endpoint with GET method to load an existing product form with wrong token
+	# Fail test the '/farms/<int:farm_id>/products<int:product_id>' endpoint with GET method to load an existing product form with wrong token
 	def test_get_products_form_update_wrong_token(self):
 		self.create_farm()
 		farm_id = db.session.query(Farm).filter(Farm.name==self.test_farm['name']).first().id
-
+		res = self.create_product(farm_id)
+		product_id = db.session.query(Product).filter(Product.name==self.test_product['name']).first().id
+		
 		res = self.client().get(
-			'/farms/{}/products/0/new'.format(str(farm_id)),
+			'/farms/{}/products/{}'.format(str(farm_id), str(product_id)),
 			headers={'Authorization': 'Bearer token'}
 			)		
 
 		self.assertEqual(res.status_code, 401)	
 		self.delete_farm_and_product()
 
-	# Success test the '/farms/<int:farm_id/products/0/new' endpoint with POST method to create a new product
+	# Success test the '/farms/<int:farm_id>/products/0/new' endpoint with POST method to create a new product
 	def test_post_products_form_create(self):
 		self.create_farm()
 		farm_id = db.session.query(Farm).filter(Farm.name==self.test_farm['name']).first().id		
@@ -318,7 +322,7 @@ class FarmShopTestCase(unittest.TestCase):
 		self.delete_farm_and_product()
 
 
-	# Fail test the '/farms/<int:farm_id/products/0/new' endpoint with POST method to create a new product with wrong token
+	# Fail test the '/farms/<int:farm_id>/products/0/new' endpoint with POST method to create a new product with wrong token
 	def test_post_products_form_create_wrong_token(self):
 		self.create_farm()
 		farm_id = db.session.query(Farm).filter(Farm.name==self.test_farm['name']).first().id		
@@ -332,17 +336,17 @@ class FarmShopTestCase(unittest.TestCase):
 		self.assertEqual(res.status_code, 401)
 		self.delete_farm_and_product()
 
-	# Success test the '/farms/<int:farm_id>/products/<int:product_id>/update' endpoint with POST method to update an existing product
+	# Success test the '/farms/<int:farm_id>/products/<int:product_id>' endpoint with POST or PATCH method to update an existing product
 	def test_post_products_form_update(self):
 		self.create_farm()
 		farm_id = db.session.query(Farm).filter(Farm.name==self.test_farm['name']).first().id
 		self.create_product(farm_id)
 		product_id = db.session.query(Product).filter(Product.farm_id==farm_id).filter(Product.name==self.test_product['name']).first().id
 		
-		res = self.client().post(
+		res = self.client().patch(
 			'/farms/{}/products/{}'.format(str(farm_id), str(product_id)),
 			data=dict(name=self.test_product_update['name'], quantity=self.test_product_update['quantity']),
-			headers={'Authorization': self.administrator_bearer}
+			headers={'Authorization': self.employee_bearer}
 			)		
 
 		product = db.session.query(Product).filter(Product.id==product_id).first()
@@ -352,14 +356,14 @@ class FarmShopTestCase(unittest.TestCase):
 		self.assertEqual(product.quantity, self.test_product_update['quantity'])
 		self.delete_farm_and_product()
 
-	# Fail test the '/farms/<int:farm_id>/products/<int:product_id>/update' endpoint with POST method to update an existing product with wrong token
-	def test_post_products_form_update(self):
+	# Fail test the '/farms/<int:farm_id>/products/<int:product_id>' endpoint with POST or PATCH method to update an existing product with wrong token
+	def test_post_products_form_update_wrong_token(self):
 		self.create_farm()
 		farm_id = db.session.query(Farm).filter(Farm.name==self.test_farm['name']).first().id
 		self.create_product(farm_id)
 		product_id = db.session.query(Product).filter(Product.farm_id==farm_id).filter(Product.name==self.test_product['name']).first().id
 
-		res = self.client().post(
+		res = self.client().patch(
 			'/farms/{}/products/{}'.format(str(farm_id), str(1000)),
 			data=dict(name=self.test_product_update['name'], quantity=self.test_product_update['quantity']),
 			headers={'Authorization': 'Bearer token'}
@@ -367,7 +371,7 @@ class FarmShopTestCase(unittest.TestCase):
 
 		self.assertEqual(res.status_code, 401)
 
-	# Success test the '/farms/<int:farm_id>/products/' endpoint with DELETE method to delete a product
+	# Success test the '/farms/<int:farm_id>/products/<int:product_id>' endpoint with DELETE method to delete a product
 	def test_delete_product(self):
 		self.create_farm()
 		farm_id = db.session.query(Farm).filter(Farm.name==self.test_farm['name']).first().id
@@ -375,12 +379,12 @@ class FarmShopTestCase(unittest.TestCase):
 		product_id = db.session.query(Product).filter(Product.name==self.test_product['name']).first().id
 
 		res = self.client().delete('/farms/{}/products/{}'.format(farm_id, product_id),
-			headers={'Authorization': self.administrator_bearer}
+			headers={'Authorization': self.employee_bearer}
 			)
 		self.assertEqual(res.status_code, 200)
 
-	# Fail test the '/farms/<int:farm_id>/products/' endpoint with DELETE method to delete a product with wrong bearer
-	def test_delete_product(self):
+	# Fail test the '/farms/<int:farm_id>/products/<int:product_id>' endpoint with DELETE method to delete a product with wrong bearer
+	def test_delete_product_wrong_token(self):
 		self.create_farm()
 		farm_id = db.session.query(Farm).filter(Farm.name==self.test_farm['name']).first().id
 		self.create_product(farm_id)
