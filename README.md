@@ -53,7 +53,7 @@ flask run
 
 **Note: The app configuration can be changed from the `__init__.py` file, by changing the following line:**
 ```
-	config_name = os.getenv('FLASK_CONFIGURATION', 'production')
+config_name = os.getenv('FLASK_CONFIGURATION', 'production')
 ```
 
 You can choose any of the options below:
@@ -90,11 +90,14 @@ To fully access and test the app a login will be required. Without login informa
 
 **NOTE: Login instructions will be provided in a separate note or upon request.**
 
-**Logging in**
+#### Logging In
 1. To login simply follow the login link and then press on the login link below. 
 2. Choose gmail login and insert the user and password provided.
 3. Once successful, copy the url and retain the token for testing.
 4. You should now have access as per the roles described above.
+
+#### Logging Out
+**NOTE: There currently is no logging out functionality implemented. To log out simply close the browser and reopen it.**
 
 ### Farms
 Viewing farms does not require authentication. Click on `home` to view farms.
