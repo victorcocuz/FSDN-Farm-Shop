@@ -33,7 +33,8 @@ class AuthError(Exception):
 # -------------------------------------------------------------------------------------------#
 def get_token_auth_cookie():
     auth = request.cookies.get('access_token_cookie', None)
-    return auth    
+    return auth
+
 
 def get_token_auth_header():
     auth = request.headers.get('Authorization', None)
@@ -91,6 +92,8 @@ def check_permissions(permission, payload):
 # Verify Token
 # Decodes the payload from the token and validates the clais
 # -------------------------------------------------------------------------------------------#
+
+
 def verify_decode_jwt(token):
     jsonurl = urlopen(f'https://{AUTH0_DOMAIN}/.well-known/jwks.json')
     jwks = json.loads(jsonurl.read())
@@ -140,11 +143,11 @@ def verify_decode_jwt(token):
                 'code': 'invalid_header',
                 'description': 'Unable to parse authentication token.'
             }, 400)
-            
+
     raise AuthError({
-                'code': 'invalid_header',
+        'code': 'invalid_header',
                 'description': 'Unable to find the appropriate key.'
-            }, 400)
+    }, 400)
 
 
 #++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++#

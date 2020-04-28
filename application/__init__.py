@@ -12,41 +12,46 @@ from flask_jwt_extended import (
 )
 
 config = {
-	"production": ProductionConfig,
-	"staging": StagingConfig,
-	"development": DevelopmentConfig,
-	"testing": TestingConfig,
-	"default": DevelopmentConfig
+    "production": ProductionConfig,
+    "staging": StagingConfig,
+    "development": DevelopmentConfig,
+    "testing": TestingConfig,
+    "default": DevelopmentConfig
 }
 
+
 def configure_app(app):
-	config_name = os.getenv('FLASK_CONFIGURATION', 'production')
-	app.config.from_object(config[config_name])
-	app.config.from_pyfile('config.cfg', silent=True)
+    config_name = os.getenv('FLASK_CONFIGURATION', 'production')
+    app.config.from_object(config[config_name])
+    app.config.from_pyfile('config.cfg', silent=True)
+
 
 def create_app(test_config=None):
-	app = Flask(__name__, instance_relative_config=True)
-	configure_app(app)
+    app = Flask(__name__, instance_relative_config=True)
+    configure_app(app)
 
-	with app.app_context():
-		from application import routes
-		from application.models import setup_db, db
+    with app.app_context():
+        from application import routes
+        from application.models import setup_db, db
 
-	setup_db(app)
-	migrate = Migrate(app, db)
-	jwt = JWTManager(app)
-	cors = CORS(app, resources={r"/*": {"origins": "*"}})
+    setup_db(app)
+    migrate = Migrate(app, db)
+    jwt = JWTManager(app)
+    cors = CORS(app, resources={r"/*": {"origins": "*"}})
 
-	@app.after_request
-	def after_request(response):
-		response.headers.add('Access-Control-Allow-Headers', 'Content-Type, Authorization')
-		response.headers.add('Access-Control-Allow-Methods', 'GET, POST, PATCH, DELETE, OPTIONS')
-		return response
-	
-	logging.basicConfig()
-	logging.getLogger().setLevel(logging.DEBUG)
+    @app.after_request
+    def after_request(response):
+        response.headers.add('Access-Control-Allow-Headers',
+                             'Content-Type, Authorization')
+        response.headers.add('Access-Control-Allow-Methods',
+                             'GET, POST, PATCH, DELETE, OPTIONS')
+        return response
 
-	return app
+    logging.basicConfig()
+    logging.getLogger().setLevel(logging.DEBUG)
+
+    return app
+
 
 flask_app = create_app()
 

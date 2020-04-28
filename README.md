@@ -16,21 +16,21 @@ There are three levels of access to the application:
 
 
 ## Requirements
-Models will include at least…
-	Two classes with primary keys at at least two attributes each
-	[Optional but encouraged] One-to-many or many-to-many relationships between classes
-Endpoints will include at least…
-	Two GET requests
-	One POST request
-	One PATCH request
-	One DELETE request
-Roles will include at least…
-	Two roles with different permissions
-	Permissions specified for all endpoints
-Tests will include at least…
-	One test for success behavior of each endpoint
-	One test for error behavior of each endpoint
-	At least two tests of RBAC for each role
+-Models will include at least…
+--Two classes with primary keys at least two attributes each
+--[Optional but encouraged] One-to-many or many-to-many relationships between classes
+-Endpoints will include at least…
+--Two GET requests
+--One POST request
+--One PATCH request
+--One DELETE request
+-Roles will include at least…
+--Two roles with different permissions
+--Permissions specified for all endpoints
+-Tests will include at least…
+--One test for success behavior of each endpoint
+--One test for error behavior of each endpoint
+--At least two tests of RBAC for each role
 
 
 ## Installation Instructions
@@ -74,7 +74,7 @@ AUTH0_REDIRECT = 'http://127.0.0.1:5000/'
 ```
 
 ### Testing
-Te test file contains 28 tests, two for each endpoint provided (one for success and one for fail). Some of these do not require a token, some have been tested against the employee role and some against the administrator role.
+The test file contains 28 tests, two for each endpoint provided (one for success and one for fail). Some of these do not require a token, some have been tested against the employee role and some against the administrator role.
 
 To successfully run the tests, debug must be set to false: `export DEBUG=False`
 
@@ -131,37 +131,32 @@ This was not required, but has been created to get an understanding of how a ful
 This has been created as per requirements above. 
 
 ### Summary
+
 GET '/'
 GET '/login'
-GET '/farms'
-GET '/farms/0/new'
+GET '/farms/'
 GET '/farms/<int:farm_id>/update'
-POST '/farms/0/new'
+POST '/farms/'
 PATCH '/farms/<int:farm_id>/update'
 DELETE '/farms/<int:farm_id>'
+GET '/farms/<int:farm_id>'
 GET '/farms/<int:farm_id>/products'
-GET '/farms/<int:farm_id>/products/0/new'
 GET '/farms/<int:farm_id>/products/<int:product_id>'
-POST '/farms/<int:farm_id>/products/0/new'
+POST '/farms/<int:farm_id>/products'
 PATCH '/farms/<int:farm_id>/products/<int:product_id>'
 DELETE '/farms/<int:farm_id>/products/<int:product_id>'
-
-### GET '/'
-- Description: Redirects to '/farms' URL
-- Request arguments: None
-- Returns: A redirect to the '/farms' endpoint
 
 ### GET '/login'
 - Description: Loads the login page
 - Request arguments: None
 - Returns: Renders a html template and sends a login_uri, compiled from app.config
 
-### GET '/farms'
+### GET '/'
 - Description: Loads a page that displays all farms
 - Request Arguments: None
 - Returns: Renders a html template and sends the farm data fetched from the database
 
-### GET '/farms/0/new'
+### GET '/farms'
 - Description: Loads a new farms form
 - Request Arguments: None
 - Requires Auth and permission 'edit:farm'
@@ -173,7 +168,7 @@ DELETE '/farms/<int:farm_id>/products/<int:product_id>'
 - Requires Auth and permission 'edit:farm'
 - Returns: Renders a html template, sends a WTF Form and the farm data to update based on the farm_id
 
-### POST '/farms/0/new'
+### POST '/farms'
 - Description: Adds a new farm to the database
 - Request Arguments: None
 - Requires Auth and permission 'edit:farm'
@@ -196,7 +191,7 @@ DELETE '/farms/<int:farm_id>/products/<int:product_id>'
 - Request Arguments: farm_id
 - Returns: A html template and sends the products data fetched from the database which belongs to the farm of id farm_id
 
-### GET '/farms/<int:farm_id>/products/0/new'
+### GET '/farms/<int:farm_id>/products'
 - Description: Loads a new products form
 - Request Arguments: farm_id
 - Requires Auth and permission 'edit:product'
@@ -208,7 +203,7 @@ DELETE '/farms/<int:farm_id>/products/<int:product_id>'
 - Requires Auth and permission 'edit:product'
 - Returns: A html template, sends a WTF form, the farm_id and the current product_id for the user to update
 
-### POST '/farms/<int:farm_id>/products/0/new'
+### POST '/farms/<int:farm_id>/products'
 - Description: Adds a new product to the database
 - Request Arguments: farm_id
 - Requires Auth and permission 'edit:product'
