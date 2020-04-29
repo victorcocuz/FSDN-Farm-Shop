@@ -1,5 +1,8 @@
 from flask_wtf import FlaskForm
-from wtforms import IntegerField, StringField, PasswordField, BooleanField, SubmitField, DecimalField
+from wtforms import (
+    IntegerField, StringField, PasswordField,
+    BooleanField, SubmitField, DecimalField
+)
 from wtforms.validators import DataRequired, NumberRange
 
 
@@ -18,5 +21,8 @@ class FarmForm(FlaskForm):
 
 class ProductForm(FlaskForm):
     name = StringField('name', validators=[DataRequired()])
-    quantity = DecimalField('quantity', validators=[DataRequired(), NumberRange(
-        min=0, max=10000, message='Must be a decimal number')])
+    quantity = DecimalField(
+        'quantity',
+        validators=[
+            DataRequired(),
+            NumberRange(min=0, max=10000, message='Must be a decimal number')])

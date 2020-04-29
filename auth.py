@@ -1,6 +1,6 @@
-#++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++#
+# +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++#
 # Imports and global variables
-#++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++#
+# +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++#
 import json
 import logging
 from flask import request, _request_ctx_stack, abort
@@ -13,9 +13,9 @@ ALGORITHMS = ['RS256']
 API_AUDIENCE = 'farm_shop_api'
 
 
-#++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++#
+# +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++#
 # Auth
-#++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++#
+# +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++#
 
 # AuthError Exception
 # A standardized way to communicate auth failure modes
@@ -68,9 +68,9 @@ def get_token_auth_header():
     return token
 
 
-#++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++#
+# +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++#
 # Verifications
-#++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++#
+# +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++#
 
 # Check Permissions
 # Raises an error if there are no permissions included in the payload
@@ -135,7 +135,8 @@ def verify_decode_jwt(token):
         except jwt.JWTClaimsError:
             raise AuthError({
                 'code': 'invalid_claims',
-                'description': 'Incorrect claims. Please, check the audience and issuer.'
+                'description': '''Incorrect claims.
+                Please, check the audience and issuer.'''
             }, 401)
 
         except Exception:
@@ -150,9 +151,9 @@ def verify_decode_jwt(token):
     }, 400)
 
 
-#++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++#
+# +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++#
 # Decorators
-#++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++#
+# +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++#
 
 # Requires auth decorator method
 # Uses the get_token_auth_header, verify_code_jwt and check_permissions methods
@@ -167,7 +168,7 @@ def requires_auth(permission=''):
                 token = get_token_auth_header()
             try:
                 payload = verify_decode_jwt(token)
-            except:
+            except BaseException:
                 abort(401)
             check_permissions(permission, payload)
             return f(*args, **kwargs)

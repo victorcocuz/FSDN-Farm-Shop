@@ -1,7 +1,7 @@
 """empty message
 
 Revision ID: 47833fb40b10
-Revises: 
+Revises:
 Create Date: 2020-04-25 13:22:35.746320
 
 """

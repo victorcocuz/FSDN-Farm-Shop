@@ -1,6 +1,6 @@
-#++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++#
+# +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++#
 # Imports
-#++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++#
+# +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++#
 from flask import render_template, flash, redirect, url_for, request, jsonify
 from flask import current_app as app
 from application.forms import LoginForm, FarmForm, ProductForm
@@ -16,20 +16,21 @@ from flask_jwt_extended import (
 import logging
 
 
-#++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++#
+# +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++#
 # General
-#++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++#
+# +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++#
 
 # Login
 # -------------------------------------------------------------------------------------------#
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     login_uri = app.config.get('REQUEST_URI')
-    return render_template('forms/login.html', title='sign In', login_uri=login_uri)
+    return render_template(
+        'forms/login.html', title='sign In', login_uri=login_uri)
 
-#++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++#
+# +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++#
 # Farms
-#++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++#
+# +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++#
 
 # Show all farms
 # -------------------------------------------------------------------------------------------#
@@ -127,9 +128,9 @@ def delete_farm(farm_id):
     return jsonify({'success': True})
 
 
-#++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++#
+# +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++#
 # Products
-#++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++#
+# +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++#
 
 # Show all products for a specific farm
 # -------------------------------------------------------------------------------------------#
@@ -138,7 +139,8 @@ def show_products(farm_id):
     farm = db.session.query(Farm).filter(Farm.id == farm_id).scalar()
     if not farm:
         abort(404)
-    products = db.session.query(Product).join(Farm, Farm.id == Product.farm_id).filter(
+    products = db.session.query(Product).join(
+        Farm, Farm.id == Product.farm_id).filter(
         Farm.id == farm_id).order_by(Product.name).all()
 
     response = []
@@ -162,7 +164,8 @@ def show_products(farm_id):
 @app.route('/farms/<int:farm_id>/products', methods=['GET'])
 @requires_auth('add:product')
 def create_product_form(farm_id):
-    return render_template('forms/new_product.html', form=ProductForm(), farm_id=farm_id)
+    return render_template('forms/new_product.html',
+                           form=ProductForm(), farm_id=farm_id)
 
 
 @app.route('/farms/<int:farm_id>/products/<int:product_id>', methods=['GET'])
@@ -170,7 +173,11 @@ def create_product_form(farm_id):
 def update_product_form(farm_id, product_id):
     product = db.session.query(Product).filter(
         Product.id == product_id).scalar()
-    return render_template('forms/new_product.html', form=ProductForm(), farm_id=farm_id, product=product)
+    return render_template('forms/new_product.html',
+                           form=ProductForm(),
+                           farm_id=farm_id,
+                           product=product
+                           )
 
 
 # Add a new product
@@ -201,12 +208,14 @@ def create_product_submission(farm_id):
 
 # Update an existing product
 # -------------------------------------------------------------------------------------------#
-@app.route('/farms/<int:farm_id>/products/<int:product_id>', methods=['PATCH', 'POST'])
+@app.route('/farms/<int:farm_id>/products/<int:product_id>',
+           methods=['PATCH', 'POST'])
 @requires_auth('update:product')
 def update_product(farm_id, product_id):
     try:
         product = db.session.query(Product).filter(
-            Product.farm_id == farm_id).filter(Product.id == product_id).scalar()
+            Product.farm_id == farm_id).filter(
+            Product.id == product_id).scalar()
         product.name = request.form.get('name')
         product.quantity = request.form.get('quantity')
 
@@ -221,7 +230,8 @@ def update_product(farm_id, product_id):
 
 # Delete a product
 # -------------------------------------------------------------------------------------------#
-@app.route('/farms/<int:farm_id>/products/<int:product_id>', methods=['DELETE'])
+@app.route('/farms/<int:farm_id>/products/<int:product_id>',
+           methods=['DELETE'])
 @requires_auth('delete:product')
 def delete_product(farm_id, product_id):
     try:
@@ -237,9 +247,9 @@ def delete_product(farm_id, product_id):
     return jsonify({'success': True})
 
 
-#++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++#
+# +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++#
 # Error handlers
-#++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++#
+# +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++#
 
 # Error handlers for expected errors
 # -------------------------------------------------------------------------------------------#

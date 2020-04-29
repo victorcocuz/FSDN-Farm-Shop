@@ -1,7 +1,9 @@
 import os
 import logging
 from flask import Flask, jsonify, redirect, url_for
-from config import ProductionConfig, StagingConfig, DevelopmentConfig, TestingConfig
+from config import (
+    ProductionConfig, StagingConfig, DevelopmentConfig, TestingConfig
+)
 from flask_migrate import Migrate
 from flask_cors import CORS
 from flask_jwt_extended import (
